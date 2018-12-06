@@ -85,9 +85,13 @@
                 android:orientation="vertical"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="42dp">
+
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="14dp"
+                    android:background="#FFFFFF"
                     android:gravity="center"
                     android:textColor="#FFFFFF"
                     android:textSize="20dp" />
@@ -127,9 +131,13 @@
                 android:orientation="vertical"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="42dp">
+
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="14dp"
+                    android:background="#FFFFFF"
                     android:gravity="center"
                     android:textColor="#FFFFFF"
                     android:textSize="20dp" />
