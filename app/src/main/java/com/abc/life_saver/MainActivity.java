@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void registerUser(View v){
-        Intent intent = new Intent(this,Register.class);
+        Intent intent = new Intent(this,RegistrationMenuActivity.class);
         startActivity(intent);
     }
 }
