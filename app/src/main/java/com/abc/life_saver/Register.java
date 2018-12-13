@@ -33,7 +33,7 @@ public class Register extends AppCompatActivity {
 
     private EditText name, email, password, contact, dob;
     private RadioGroup gender;
-    private RadioButton male,female;
+    private RadioButton genderOption;
     private Spinner blood;
     private Button submit, cancel;
     private FirebaseAuth mAuth;
@@ -64,12 +64,27 @@ public class Register extends AppCompatActivity {
         contact = (EditText) findViewById(R.id.contact);
         dob = (EditText) findViewById(R.id.dob);
         gender = (RadioGroup) findViewById(R.id.gender);
-        male = (RadioButton) findViewById(R.id.male);
-        female = (RadioButton) findViewById(R.id.female);
         blood = (Spinner) findViewById(R.id.blood);
         submit = (Button) findViewById(R.id.submit);
         cancel = (Button) findViewById(R.id.cancel);
         donor = (CheckBox) findViewById(R.id.donor);
+
+        gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                genderOption = gender.findViewById(checkedId);
+
+                switch (checkedId){
+                    case R.id.male:
+                        userGender = genderOption.getText().toString();
+                        break;
+                    case R.id.female:
+                        userGender = genderOption.getText().toString();
+                        break;
+                    default:
+                }
+            }
+        });
 
       /*  submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,12 +127,7 @@ public class Register extends AppCompatActivity {
                     useremail = email.getText().toString().trim();
                     userpassword = password.getText().toString().trim();
                     usercontact = Integer.parseInt(contact.getText().toString().trim());
-                    if(male.isSelected()){
-                        userGender ="male";
-                    }
-                    else if(female.isSelected()){
-                        userGender ="female";
-                    }
+
                     DateFormat df = new SimpleDateFormat("DD/MM/YYYY");
                     try {
                         userdob = df.parse(dob.getText().toString().trim());
