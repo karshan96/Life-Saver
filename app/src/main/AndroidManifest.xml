@@ -17,9 +17,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Register" />
-        <activity android:name=".StartActivity" />
         <activity android:name=".RegistrationMenuActivity" />
-        <activity android:name=".HosRegisterActivity"></activity>
+        <activity android:name=".HosRegisterActivity" />
+        <activity android:name=".SampleActivity"></activity>
     </application>
 
 </manifest>

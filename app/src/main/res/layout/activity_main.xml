@@ -4,41 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="@drawable/back"
+    tools:context=".Register"
+    tools:layout_editor_absoluteY="25dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="79dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1.5"
-            android:orientation="horizontal"
             android:background="#FF0000"
+            android:orientation="horizontal"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="42dp">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#8B0000">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="User LogIn"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
                     android:gravity="center"
+                    android:text="User Login"
                     android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    android:textSize="30dp" />
+                    android:textSize="30dp"
+                    android:textStyle="bold" />
             </RelativeLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -46,10 +51,17 @@
             android:orientation="horizontal"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
-            android:background="#FF0000"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="42dp">
 
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                tools:srcCompat="@drawable/log" />
         </LinearLayout>
 
         <LinearLayout
@@ -59,9 +71,9 @@
             android:orientation="horizontal"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
-            android:background="#FF0000"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="42dp">
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -69,61 +81,16 @@
                 android:orientation="vertical"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="42dp">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Name"
-                    android:textColor="#FFFFFF"
                     android:gravity="center_vertical"
-                    android:textSize="20dp"/>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="42dp">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginBottom="14dp"
-                    android:background="#FFFFFF"
-                    android:gravity="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20dp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:background="#FF0000"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="42dp">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="42dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:text="Email Address"
                     android:textColor="#FFFFFF"
-                    android:gravity="center_vertical"
-                    android:textSize="20dp"/>
+                    android:textSize="18dp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -133,18 +100,19 @@
                 tools:layout_editor_absoluteY="42dp">
 
                 <EditText
+                    android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="14dp"
                     android:layout_marginBottom="14dp"
                     android:background="#FFFFFF"
-                    android:gravity="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20dp" />
-
+                    android:ems="10"
+                    android:inputType="textEmailAddress"
+                    android:textColor="#000000" />
             </LinearLayout>
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -152,11 +120,60 @@
             android:orientation="horizontal"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
-            android:background="#FF0000"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="42dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="42dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Password"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="42dp">
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="14dp"
+                    android:background="#FFFFFF"
+                    android:ems="10"
+                    android:inputType="textPassword"
+                    android:textColor="#000000" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="42dp">
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -164,21 +181,20 @@
             android:orientation="horizontal"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
-            android:background="#FF0000"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="42dp">
 
             <Button
-                android:id="@+id/LogIn"
+                android:id="@+id/login"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:background="#8B0000"
                 android:text="LogIn"
-                android:textSize="16dp"
-                tools:textColor="#FFFFFF" />
-
+                android:textColor="#FFFFFF" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -186,36 +202,33 @@
             android:orientation="horizontal"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
-            android:background="#FF0000"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="42dp">
+
             <Button
-                android:id="@+id/Register"
+                android:id="@+id/register"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Register"
-                android:onClick="registerUser"
-                android:textSize="16dp"
-                android:layout_margin="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:background="#8B0000"
-                tools:textColor="#FFFFFF"/>
-
+                android:onClick="registerUser"
+                android:text="Register"
+                android:textColor="#FFFFFF" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3"
+            android:layout_weight="1"
             android:orientation="horizontal"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:background="#FF0000"
+            android:paddingLeft="85dp"
+            android:paddingRight="85dp"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="42dp">
-
 
         </LinearLayout>
 
     </LinearLayout>
-
 
 </android.support.constraint.ConstraintLayout>

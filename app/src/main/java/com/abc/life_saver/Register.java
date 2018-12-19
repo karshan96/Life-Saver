@@ -1,12 +1,10 @@
 package com.abc.life_saver;
 
-import android.content.Intent;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,20 +12,16 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.FieldPosition;
 import java.text.ParseException;
-import java.text.ParsePosition;
 import java.util.Date;
-
-import static java.util.Date.parse;
 
 public class Register extends AppCompatActivity {
 
@@ -36,10 +30,10 @@ public class Register extends AppCompatActivity {
     private RadioButton genderOption;
     private Spinner blood;
     private Button submit, cancel;
-    private FirebaseAuth mAuth;
+    private FirebaseAuth logAuth;
     private CheckBox donor;
 
-    private DatabaseReference usRef,doRef;
+    private DatabaseReference usRef, doRef;
 
     String username;
     String useremail;
@@ -48,15 +42,16 @@ public class Register extends AppCompatActivity {
     Date userdob;
     String userGender;
     String bloodGroup;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
         //Authentication
-        usRef = FirebaseDatabase.getInstance().getReference().child("User");
-        doRef = FirebaseDatabase.getInstance().getReference().child("Donor");
-        mAuth = FirebaseAuth.getInstance();
+        usRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        doRef = FirebaseDatabase.getInstance().getReference().child("Donors");
+        logAuth = FirebaseAuth.getInstance();
 
         name = (EditText) findViewById(R.id.name);
         email = (EditText) findViewById(R.id.email);
@@ -74,7 +69,7 @@ public class Register extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 genderOption = gender.findViewById(checkedId);
 
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.male:
                         userGender = genderOption.getText().toString();
                         break;
@@ -86,33 +81,18 @@ public class Register extends AppCompatActivity {
             }
         });
 
-      /*  submit.setOnClickListener(new View.OnClickListener() {
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddUser();
+                finish();
             }
-        });*/
+        });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        /*FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        if(currentUser == null){
-            Intent startIntent = new Intent(Register.this, StartActivity.class);
-            startActivity(startIntent);
-            finish();
-        }*/
-        AddUser();
-
-    }
-
-    protected void AddUser() {
-
-
-        /*if (TextUtils.isEmpty(username) ||
+    public void AddUser() {
+    /*if (TextUtils.isEmpty(username) ||
                 !TextUtils.isEmpty(useremail) ||
                 !TextUtils.isEmpty(useraddress) ||
                 !TextUtils.isEmpty(usercontact) ||
@@ -120,41 +100,41 @@ public class Register extends AppCompatActivity {
                 !TextUtils.isEmpty(userdob)) {
             Toast.makeText(this, "You should enter missing things", Toast.LENGTH_LONG).show();
         } else {*/
-        submit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    username = name.getText().toString().trim();
-                    useremail = email.getText().toString().trim();
-                    userpassword = password.getText().toString().trim();
-                    usercontact = Integer.parseInt(contact.getText().toString().trim());
+                username = name.getText().toString().trim();
+                useremail = email.getText().toString().trim();
+                userpassword = password.getText().toString().trim();
+                usercontact = Integer.parseInt(contact.getText().toString().trim());
 
-                    DateFormat df = new SimpleDateFormat("DD/MM/YYYY");
-                    try {
-                        userdob = df.parse(dob.getText().toString().trim());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                DateFormat df = new SimpleDateFormat("DD/MM/YYYY");
+                try {
+                    userdob = df.parse(dob.getText().toString().trim());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                df.format(userdob);
+                bloodGroup = blood.getSelectedItem().toString().trim();
+
+                if (donor.isChecked()) {
+                    String i = doRef.push().getKey();
+                    User user = new User(username, useremail, userpassword, usercontact, userGender, userdob, bloodGroup);
+                    doRef.child(i).setValue(user);
+                }
+                //FirebaseUser currentUser = mAuth.getCurrentUser();
+
+                String id = usRef.push().getKey();
+                User user = new User(username, useremail, userpassword, usercontact, userGender, userdob, bloodGroup);
+                usRef.child(id).setValue(user);
+
+                logAuth.createUserWithEmailAndPassword(useremail,userpassword)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            finish();
+                        }
                     }
-                    df.format(userdob);
-                    bloodGroup = blood.getSelectedItem().toString().trim();
+                });
+            }
 
-                    if(donor.isChecked()){
-                        String i = doRef.push().getKey();
-                        User user = new User(username,useremail,userpassword,usercontact,userGender,userdob,bloodGroup);
-                        doRef.child(i).setValue(user);
-                    }
-                    //FirebaseUser currentUser = mAuth.getCurrentUser();
-
-                        String id = usRef.push().getKey();
-                        User user = new User(username,useremail,userpassword,usercontact,userGender,userdob,bloodGroup);
-                        usRef.child(id).setValue(user);
-                        finish();
-
-                    //myRef.child(id).child("name").setValue(username);
-                    //myRef.child(id).child("email").setValue(useremail);
-                    }
-
-            });
-        //}
-    }
 
 }
