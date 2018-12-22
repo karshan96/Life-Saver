@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                         User u = user.getValue(User.class);
 
                         if (u.getPassword().equals(userPassword)){
-                            Intent intent = new Intent(MainActivity.this, SampleActivity.class);
+                            Intent intent = new Intent(MainActivity.this, Search.class);
                             startActivity(intent);
                         } else {
                             Toast.makeText(MainActivity.this, "Password is wrong", Toast.LENGTH_LONG).show();

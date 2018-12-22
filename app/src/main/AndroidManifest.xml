@@ -19,7 +19,18 @@
         <activity android:name=".Register" />
         <activity android:name=".RegistrationMenuActivity" />
         <activity android:name=".HosRegisterActivity" />
-        <activity android:name=".SampleActivity"></activity>
+        <activity
+            android:name=".Search"
+            android:label="@string/title_activity_search"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".BloodStock"
+            android:label="@string/title_activity_blood_stock"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".ProfileUpdate"
+            android:label="@string/title_activity_profile_update"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
     </application>
 
 </manifest>

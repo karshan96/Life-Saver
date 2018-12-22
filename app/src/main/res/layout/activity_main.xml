@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/back"
+    android:background="@drawable/bld"
     tools:context=".Register"
     tools:layout_editor_absoluteY="25dp">
 
@@ -54,14 +54,6 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="42dp">
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                tools:srcCompat="@drawable/log" />
         </LinearLayout>
 
         <LinearLayout

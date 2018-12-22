@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -118,6 +119,7 @@ public class Register extends AppCompatActivity {
                     String i = doRef.push().getKey();
                     User user = new User(username, useremail, userpassword, usercontact, userGender, userdob, bloodGroup);
                     doRef.child(i).setValue(user);
+                    Toast.makeText(Register.this, "User registration finished", Toast.LENGTH_LONG).show();
                 }
                 //FirebaseUser currentUser = mAuth.getCurrentUser();
 
