@@ -10,7 +10,7 @@
             android:title="Search" />
         <item
             android:id="@+id/nav_list"
-            android:icon="@drawable/stock"
+            android:icon="@drawable/list"
             android:title="Blood stock" />
         <item
             android:id="@+id/nav_update"

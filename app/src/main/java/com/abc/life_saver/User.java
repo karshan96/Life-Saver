@@ -1,21 +1,19 @@
 package com.abc.life_saver;
 
-import java.util.Date;
-
 public class User {
     private String name;
     private String email;
     private String password;
     private int contact;
     private String gender;
-    private Date dob;
+    private String dob;
     private String bloodGroup;
 
     public User(){
 
     }
 
-    public User(String name, String email, String password, int contact, String gender, Date dob, String bloodGroup) {
+    public User(String name, String email, String password, int contact, String gender, String dob, String bloodGroup) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -65,11 +63,11 @@ public class User {
         this.gender = gender;
     }
 
-    public Date getDob() {
+    public String getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(String dob) {
         this.dob = dob;
     }
 

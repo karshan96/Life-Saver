@@ -24,4 +24,6 @@
     <string name="Search">Search</string>
     <string name="BloodStock">Blood Stock</string>
     <string name="ProfileUpdate">Profile Update</string>
+    <string name="title_activity_user_register">UserRegister</string>
+    <string name="title_activity_hospital_register">HospitalRegister</string>
 </resources>

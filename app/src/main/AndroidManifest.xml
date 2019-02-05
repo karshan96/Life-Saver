@@ -16,9 +16,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Register" />
-        <activity android:name=".RegistrationMenuActivity" />
-        <activity android:name=".HosRegisterActivity" />
         <activity
             android:name=".Search"
             android:label="@string/title_activity_search"
@@ -30,7 +27,11 @@
         <activity
             android:name=".ProfileUpdate"
             android:label="@string/title_activity_profile_update"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".UserRegister"
+            android:label="@string/title_activity_user_register"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
     </application>
 
 </manifest>

@@ -9,20 +9,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     Button register,login;
-    EditText email,passwoard;
+    EditText email,password;
+    private FirebaseAuth logAuth;
+    private FirebaseUser user;
 
     private DatabaseReference usRef;
 
-    private String userEmail;
+    public String userEmail;
     private String userPassword;
 
     @Override
@@ -30,54 +32,84 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        usRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        logAuth = FirebaseAuth.getInstance();
 
-        register =(Button)findViewById(R.id.register);
-        login = (Button)findViewById(R.id.login);
+        register = (Button) findViewById(R.id.register);
+        login = (Button) findViewById(R.id.login);
         email = (EditText) findViewById(R.id.email);
-        passwoard = (EditText)findViewById(R.id.password);
+        password = (EditText) findViewById(R.id.password);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login();
+                logIn();
+            }
+        });
+
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                registerUser();
             }
         });
     }
 
-    private void login() {
+    public void logIn(){
         userEmail = email.getText().toString().trim();
-        userPassword = passwoard.getText().toString().trim();
+        userPassword = password.getText().toString().trim();
 
-        Query query = usRef.orderByChild("email").equalTo(userEmail);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        if(userEmail.isEmpty()){
+            Toast.makeText(MainActivity.this, "Email is empty", Toast.LENGTH_LONG).show();
+            email.requestFocus();
+            return;
+        }
+        if(userPassword.length()<6){
+            Toast.makeText(MainActivity.this, "Password require more then 6 digits", Toast.LENGTH_LONG).show();
+            password.requestFocus();
+            return;
+        }
+
+        logAuth.signInWithEmailAndPassword(userEmail,userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot user : dataSnapshot.getChildren()) {
-                        User u = user.getValue(User.class);
-
-                        if (u.getPassword().equals(userPassword)){
-                            Intent intent = new Intent(MainActivity.this, Search.class);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(MainActivity.this, "Password is wrong", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                } else {
-                    Toast.makeText(MainActivity.this, "User not found", Toast.LENGTH_LONG).show();
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    //checkEmailVerification();
+                    finish();
+                    startActivity(new Intent(MainActivity.this,Search.class));
+                }
+                else {
+                    Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
         });
+
     }
 
-    public void registerUser(View view){
-        Intent intent = new Intent(this,RegistrationMenuActivity.class);
+    public void registerUser(){
+        Intent intent = new Intent(this,UserRegister.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(logAuth.getCurrentUser() != null){
+            finish();
+            startActivity(new Intent(this,Search.class));
+        }
+        // Check if user is signed in (non-null) and update UI accordingly.
+    }
+
+    public void checkEmailVerification(){
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        Boolean emailflag = user.isEmailVerified();
+
+        if(emailflag){
+            finish();
+            startActivity(new Intent(this,Search.class));
+        } else {
+            Toast.makeText(MainActivity.this,"Verify user email", Toast.LENGTH_LONG).show();
+            logAuth.signOut();
+        }
     }
 }

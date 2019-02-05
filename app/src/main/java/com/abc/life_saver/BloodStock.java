@@ -14,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class BloodStock extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -68,8 +70,10 @@ public class BloodStock extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_logout) {
+            FirebaseAuth.getInstance().signOut();
+            finish();
+            startActivity(new Intent(this,MainActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
