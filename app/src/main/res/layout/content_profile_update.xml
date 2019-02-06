@@ -410,11 +410,11 @@
                 tools:layout_editor_absoluteY="42dp">
 
                 <Button
-                    android:id="@+id/submit"
+                    android:id="@+id/update"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#8B0000"
-                    android:text="Submit"
+                    android:text="Update"
                     android:textColor="#FFFFFF" />
 
             </LinearLayout>

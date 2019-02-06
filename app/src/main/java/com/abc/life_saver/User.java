@@ -1,5 +1,7 @@
 package com.abc.life_saver;
 
+import android.text.Editable;
+
 public class User {
     private String name;
     private String email;

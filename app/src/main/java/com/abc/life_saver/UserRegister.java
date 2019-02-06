@@ -1,6 +1,7 @@
 package com.abc.life_saver;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -10,16 +11,22 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,10 +39,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class UserRegister extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-        DrawerLayout drawer;
-        NavigationView navigationView;
-        Toolbar toolbar = null;
+        implements NavigationView.OnNavigationItemSelectedListener,AdapterView.OnItemSelectedListener {
+    DrawerLayout drawer;
+    NavigationView navigationView;
+    Toolbar toolbar = null;
 
     private EditText name, email, password, contact, dob;
     private RadioGroup gender;
@@ -111,6 +118,11 @@ public class UserRegister extends AppCompatActivity
                 }
             }
         });
+
+        BaseAdapter adapter = ArrayAdapter.createFromResource(this,R.array.bloodGroup,android.R.layout.simple_spinner_item);
+        blood.setAdapter(adapter);
+        blood.setOnItemSelectedListener(this);
+
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,7 +207,7 @@ public class UserRegister extends AppCompatActivity
 
         userdob = dob.getText().toString().trim();
 
-        bloodGroup = blood.getSelectedItem().toString().trim();
+        bloodGroup = blood.getSelectedItem().toString();
 
         usRef = FirebaseDatabase.getInstance().getReference("Users");
         doRef = FirebaseDatabase.getInstance().getReference("Donors");
@@ -207,12 +219,12 @@ public class UserRegister extends AppCompatActivity
                     if (donor.isChecked()) {
                         User user = new User(username, useremail, userpassword, usercontact, userGender, userdob, bloodGroup);
                         doRef.child(FirebaseAuth.getInstance().getUid()).setValue(user);
-                        finish();
                     }
 
                     User user = new User(username, useremail, userpassword, usercontact, userGender, userdob, bloodGroup);
                     usRef.child(FirebaseAuth.getInstance().getUid()).setValue(user);
                     sendEmailVerification();
+                    finish();
                 } else{
                     if(task.getException() instanceof FirebaseAuthUserCollisionException){
                         Toast.makeText(UserRegister.this, "You are already register", Toast.LENGTH_LONG).show();
@@ -242,9 +254,9 @@ public class UserRegister extends AppCompatActivity
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
                         Toast.makeText(UserRegister.this,"Successfully registered, Verification mail sent!", Toast.LENGTH_LONG).show();
-                         logAuth.signOut();
-                         finish();
-                         startActivity(new Intent(UserRegister.this,MainActivity.class));
+                        logAuth.signOut();
+                        finish();
+                        startActivity(new Intent(UserRegister.this,MainActivity.class));
                     }
                     else {
                         Toast.makeText(UserRegister.this,"Verification mail isn't sent!", Toast.LENGTH_LONG).show();
@@ -252,5 +264,16 @@ public class UserRegister extends AppCompatActivity
                 }
             });
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        TextView textView = (TextView) view;
+        textView.setTextColor(Color.parseColor("#000000"));
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

@@ -1,7 +1,9 @@
 package com.abc.life_saver;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -13,11 +15,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class Search extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
+
+    ListView listView;
+    Button search;
+    private FirebaseAuth logAuth;
+    private FirebaseDatabase database;
+    private Spinner blood;
+    ArrayList<String> list;
+    ArrayAdapter<String> adapter;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +69,50 @@ public class Search extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        listView = (ListView) findViewById(R.id.databasedata);
+        search = (Button) findViewById(R.id.Search);
+        blood = (Spinner) findViewById(R.id.blood);
+        list = new ArrayList<>();
+        adapter = new ArrayAdapter<String>(this, R.layout.data_info, R.id.datainfo, list);
+
+        BaseAdapter ada = ArrayAdapter.createFromResource(this,R.array.bloodGroup,android.R.layout.simple_spinner_item);
+        blood.setAdapter(ada);
+        blood.setOnItemSelectedListener(this);
+
+
+        logAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        user = new User();
+
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseReference usRef = database.getReference("Donors");
+                String bGroup = blood.getSelectedItem().toString();
+                list.clear();
+                usRef.orderByChild("bloodGroup").equalTo(bGroup).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()){
+
+                            user = ds.getValue(User.class);
+                            list.add(user.getName() + "\t\t\t\t\t" + user.getContact());
+
+                        }
+                        listView.setAdapter(adapter);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+
+
+
     }
 
     @Override
@@ -104,5 +174,16 @@ public class Search extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        TextView textView = (TextView) view;
+        textView.setTextColor(Color.parseColor("#000000"));
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

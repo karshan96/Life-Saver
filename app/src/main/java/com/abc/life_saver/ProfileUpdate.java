@@ -1,6 +1,7 @@
 package com.abc.life_saver;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -14,12 +15,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -29,7 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class ProfileUpdate extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
     DrawerLayout drawer;
     NavigationView navigationView;
     Toolbar toolbar = null;
@@ -42,10 +48,11 @@ public class ProfileUpdate extends AppCompatActivity
     private RadioGroup gender;
     private RadioButton genderOption;
     private Spinner blood;
-    private Button submit, cancel;
+    private Button update, cancel;
     private CheckBox donor;
     private FirebaseAuth logAuth;
     private FirebaseDatabase database;
+    private String userGender;
 
 
     @Override
@@ -80,13 +87,19 @@ public class ProfileUpdate extends AppCompatActivity
         dob = (EditText) findViewById(R.id.dob);
         gender = (RadioGroup) findViewById(R.id.gender);
         blood = (Spinner) findViewById(R.id.blood);
-        submit = (Button) findViewById(R.id.submit);
+        update = (Button) findViewById(R.id.update);
         cancel = (Button) findViewById(R.id.cancel);
         donor = (CheckBox) findViewById(R.id.donor);
 
+        BaseAdapter adapter = ArrayAdapter.createFromResource(this,R.array.bloodGroup,android.R.layout.simple_spinner_item);
+        blood.setAdapter(adapter);
+        blood.setOnItemSelectedListener(this);
+
+
         logAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        DatabaseReference usRef = database.getReference("Users");
+        final DatabaseReference usRef = database.getReference("Users");
+        final DatabaseReference doRef = database.getReference("Donors");
 
         usRef.child(logAuth.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -97,12 +110,47 @@ public class ProfileUpdate extends AppCompatActivity
                 password.setText(u.getPassword());
                 contact.setText(Integer.toString(u.getContact()));
                 dob.setText(u.getDob());
+
             }
-
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+
+        gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                genderOption = gender.findViewById(checkedId);
+
+                switch (checkedId) {
+                    case R.id.male:
+                        userGender = genderOption.getText().toString();
+                        break;
+                    case R.id.female:
+                        userGender = genderOption.getText().toString();
+                        break;
+                    default:
+                }
+            }
+        });
+
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (donor.isChecked()) {
+                    User use = new User(name.getText().toString(),email.getText().toString(),password.getText().toString(),Integer.parseInt(contact.getText().toString()),
+                            userGender,dob.getText().toString(),blood.getSelectedItem().toString());
+                    doRef.child(FirebaseAuth.getInstance().getUid()).setValue(use);
+                    Toast.makeText(ProfileUpdate.this, "Your are in donors list", Toast.LENGTH_LONG).show();
+                }else {
+                    doRef.child(FirebaseAuth.getInstance().getUid()).removeValue();
+                    Toast.makeText(ProfileUpdate.this, "Your aren't in donors list", Toast.LENGTH_LONG).show();
+                }
+                User user = new User(name.getText().toString(),email.getText().toString(),password.getText().toString(),Integer.parseInt(contact.getText().toString()),
+                        userGender,dob.getText().toString(),blood.getSelectedItem().toString());
+                usRef.child(FirebaseAuth.getInstance().getUid()).setValue(user);
+                Toast.makeText(ProfileUpdate.this, "Data updated successfully!", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -179,5 +227,14 @@ public class ProfileUpdate extends AppCompatActivity
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        TextView textView = (TextView) view;
+        textView.setTextColor(Color.parseColor("#000000"));
+    }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }
