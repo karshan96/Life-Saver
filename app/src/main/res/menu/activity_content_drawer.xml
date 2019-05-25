@@ -6,16 +6,13 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_search"
-            android:icon="@drawable/search"
-            android:title="Search" />
-        <item
-            android:id="@+id/nav_list"
-            android:icon="@drawable/list"
-            android:title="Blood stock" />
+            android:title="@string/Search" />
         <item
             android:id="@+id/nav_update"
-            android:icon="@drawable/icon"
-            android:title="Profile Update" />
+            android:title="@string/ProfileUpdate" />
+        <item
+            android:id="@+id/nav_list"
+            android:title="@string/BloodStock" />
     </group>
 
 </menu>

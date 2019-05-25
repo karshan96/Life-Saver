@@ -2,7 +2,6 @@ package com.abc.life_saver;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -14,37 +13,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.annotation.NonNull;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 
-import java.time.Instant;
-
-public class MainActivity extends AppCompatActivity
+public class AdminMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    Button register,login;
+    /*Button login;
     EditText email,password;
-    private FirebaseAuth logAuth;
-    private FirebaseUser user;
 
+    private FirebaseDatabase database;
     private DatabaseReference usRef;
-
     public String userEmail;
-    private String userPassword;
+    private String userPassword;*/
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.activity_admin_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -66,26 +53,18 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-        logAuth = FirebaseAuth.getInstance();
-        register = (Button) findViewById(R.id.register);
-        login = (Button) findViewById(R.id.login);
+        /*login = (Button) findViewById(R.id.login);
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
+
+        usRef = database.getReference();
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 logIn();
             }
-        });
-
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                registerUser();
-            }
-        });
+        });*/
     }
 
     @Override
@@ -127,12 +106,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         switch (id){
             case R.id.nav_admin:
-                Intent s = new Intent(MainActivity.this,AdminMainActivity.class);
+                Intent s = new Intent(AdminMainActivity.this,AdminMainActivity.class);
                 startActivity(s);
                 break;
 
             case R.id.nav_user:
-                Intent l = new Intent(MainActivity.this,MainActivity.class);
+                Intent l = new Intent(AdminMainActivity.this,MainActivity.class);
                 startActivity(l);
                 break;
         }
@@ -141,61 +120,48 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    public void checkEmailVerification(){
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        Boolean emailflag = user.isEmailVerified();
 
-        if(emailflag){
-            finish();
-            startActivity(new Intent(this,Search.class));
-        } else {
-            Toast.makeText(MainActivity.this,"Verify user email", Toast.LENGTH_LONG).show();
-            logAuth.signOut();
-        }
-    }
-    public void logIn(){
+    /*public void logIn(){
         userEmail = email.getText().toString().trim();
         userPassword = password.getText().toString().trim();
 
         if(userEmail.isEmpty()){
-            Toast.makeText(MainActivity.this, "Email is empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(AdminMainActivity.this, "Email is empty", Toast.LENGTH_LONG).show();
             email.requestFocus();
             return;
         }
         if(userPassword.length()<6){
-            Toast.makeText(MainActivity.this, "Password require more then 6 digits", Toast.LENGTH_LONG).show();
+            Toast.makeText(AdminMainActivity.this, "Password require more then 6 digits", Toast.LENGTH_LONG).show();
             password.requestFocus();
             return;
         }
-
-        logAuth.signInWithEmailAndPassword(userEmail,userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        Query query = usRef.child("Admin").orderByChild("email").equalTo(userEmail);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    //checkEmailVerification();
-                    finish();
-                    startActivity(new Intent(MainActivity.this,Search.class));
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // dataSnapshot is the "issue" node with all children with id 0
+
+                    for (DataSnapshot user : dataSnapshot.getChildren()) {
+                        // do something with the individual "issues"
+                        Admin a = user.getValue(Admin.class);
+
+                        if (a.getPassword().equals(userPassword)){
+                            startActivity(new Intent(AdminMainActivity.this,Search.class));
+                        } else {
+                            Toast.makeText(AdminMainActivity.this, "Password is wrong", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                } else {
+                    Toast.makeText(AdminMainActivity.this, "Admin not found", Toast.LENGTH_LONG).show();
                 }
-                else {
-                    Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 
-    }
-
-    public void registerUser(){
-        Intent intent = new Intent(this,UserRegister.class);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if(logAuth.getCurrentUser() != null){
-            finish();
-            startActivity(new Intent(this,Search.class));
-        }
-        // Check if user is signed in (non-null) and update UI accordingly.
-    }
+    }*/
 }

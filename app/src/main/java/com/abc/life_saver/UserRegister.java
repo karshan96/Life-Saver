@@ -48,7 +48,7 @@ public class UserRegister extends AppCompatActivity
     private RadioGroup gender;
     private RadioButton genderOption;
     private Spinner blood;
-    private Button submit, cancel;
+    private Button submit;
     private FirebaseAuth logAuth;
     private CheckBox donor;
     private FirebaseUser user;
@@ -99,7 +99,6 @@ public class UserRegister extends AppCompatActivity
         gender = (RadioGroup) findViewById(R.id.gender);
         blood = (Spinner) findViewById(R.id.blood);
         submit = (Button) findViewById(R.id.submit);
-        cancel = (Button) findViewById(R.id.cancel);
         donor = (CheckBox) findViewById(R.id.donor);
 
         gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

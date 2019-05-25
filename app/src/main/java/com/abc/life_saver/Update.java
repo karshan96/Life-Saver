@@ -34,7 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ProfileUpdate extends AppCompatActivity
+public class Update extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
     DrawerLayout drawer;
     NavigationView navigationView;
@@ -48,7 +48,7 @@ public class ProfileUpdate extends AppCompatActivity
     private RadioGroup gender;
     private RadioButton genderOption;
     private Spinner blood;
-    private Button update, cancel;
+    private Button update;
     private CheckBox donor;
     private FirebaseAuth logAuth;
     private FirebaseDatabase database;
@@ -88,7 +88,6 @@ public class ProfileUpdate extends AppCompatActivity
         gender = (RadioGroup) findViewById(R.id.gender);
         blood = (Spinner) findViewById(R.id.blood);
         update = (Button) findViewById(R.id.update);
-        cancel = (Button) findViewById(R.id.cancel);
         donor = (CheckBox) findViewById(R.id.donor);
 
         BaseAdapter adapter = ArrayAdapter.createFromResource(this,R.array.bloodGroup,android.R.layout.simple_spinner_item);
@@ -110,6 +109,11 @@ public class ProfileUpdate extends AppCompatActivity
                 password.setText(u.getPassword());
                 contact.setText(Integer.toString(u.getContact()));
                 dob.setText(u.getDob());
+                if(usRef.child(logAuth.getUid()).equals(doRef.child(FirebaseAuth.getInstance().getUid()))){
+                    donor.setChecked(true);
+                }else{
+                    donor.setChecked(false);
+                }
 
             }
             @Override
@@ -138,19 +142,7 @@ public class ProfileUpdate extends AppCompatActivity
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (donor.isChecked()) {
-                    User use = new User(name.getText().toString(),email.getText().toString(),password.getText().toString(),Integer.parseInt(contact.getText().toString()),
-                            userGender,dob.getText().toString(),blood.getSelectedItem().toString());
-                    doRef.child(FirebaseAuth.getInstance().getUid()).setValue(use);
-                    Toast.makeText(ProfileUpdate.this, "Your are in donors list", Toast.LENGTH_LONG).show();
-                }else {
-                    doRef.child(FirebaseAuth.getInstance().getUid()).removeValue();
-                    Toast.makeText(ProfileUpdate.this, "Your aren't in donors list", Toast.LENGTH_LONG).show();
-                }
-                User user = new User(name.getText().toString(),email.getText().toString(),password.getText().toString(),Integer.parseInt(contact.getText().toString()),
-                        userGender,dob.getText().toString(),blood.getSelectedItem().toString());
-                usRef.child(FirebaseAuth.getInstance().getUid()).setValue(user);
-                Toast.makeText(ProfileUpdate.this, "Data updated successfully!", Toast.LENGTH_LONG).show();
+                actionUpdate();
             }
         });
 
@@ -206,17 +198,17 @@ public class ProfileUpdate extends AppCompatActivity
         int id = item.getItemId();
         switch (id){
             case R.id.nav_search:
-                Intent s = new Intent(ProfileUpdate.this,Search.class);
+                Intent s = new Intent(Update.this,Search.class);
                 startActivity(s);
                 break;
 
             case R.id.nav_list:
-                Intent l = new Intent(ProfileUpdate.this,BloodStock.class);
+                Intent l = new Intent(Update.this,BloodStock.class);
                 startActivity(l);
                 break;
 
             case R.id.nav_update:
-                Intent u = new Intent(ProfileUpdate.this,ProfileUpdate.class);
+                Intent u = new Intent(Update.this, Update.class);
                 startActivity(u);
                 break;
         }
@@ -236,5 +228,23 @@ public class ProfileUpdate extends AppCompatActivity
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    public void actionUpdate(){
+        final DatabaseReference usRef = database.getReference("Users");
+        final DatabaseReference doRef = database.getReference("Donors");
+        if (donor.isChecked()) {
+            User use = new User(name.getText().toString(),email.getText().toString(),password.getText().toString(),Integer.parseInt(contact.getText().toString()),
+                    userGender,dob.getText().toString(),blood.getSelectedItem().toString());
+            doRef.child(FirebaseAuth.getInstance().getUid()).setValue(use);
+            Toast.makeText(Update.this, "Your are in donors list", Toast.LENGTH_LONG).show();
+        }else {
+            doRef.child(FirebaseAuth.getInstance().getUid()).removeValue();
+            Toast.makeText(Update.this, "Your aren't in donors list", Toast.LENGTH_LONG).show();
+        }
+        User user = new User(name.getText().toString(),email.getText().toString(),password.getText().toString(),Integer.parseInt(contact.getText().toString()),
+                userGender,dob.getText().toString(),blood.getSelectedItem().toString());
+        usRef.child(FirebaseAuth.getInstance().getUid()).setValue(user);
+        Toast.makeText(Update.this, "Data updated successfully!", Toast.LENGTH_LONG).show();
     }
 }

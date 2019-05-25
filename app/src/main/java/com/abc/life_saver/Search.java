@@ -24,7 +24,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -71,7 +70,7 @@ public class Search extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         listView = (ListView) findViewById(R.id.databasedata);
-        search = (Button) findViewById(R.id.Search);
+        search = (Button) findViewById(R.id.search);
         blood = (Spinner) findViewById(R.id.blood);
         list = new ArrayList<>();
         adapter = new ArrayAdapter<String>(this, R.layout.data_info, R.id.datainfo, list);
@@ -88,30 +87,9 @@ public class Search extends AppCompatActivity
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference usRef = database.getReference("Donors");
-                String bGroup = blood.getSelectedItem().toString();
-                list.clear();
-                usRef.orderByChild("bloodGroup").equalTo(bGroup).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot ds : dataSnapshot.getChildren()){
-
-                            user = ds.getValue(User.class);
-                            list.add(user.getName() + "\t\t\t\t\t" + user.getContact());
-
-                        }
-                        listView.setAdapter(adapter);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                actionSearch();
             }
         });
-
-
 
     }
 
@@ -166,7 +144,7 @@ public class Search extends AppCompatActivity
                 break;
 
             case R.id.nav_update:
-                Intent u = new Intent(Search.this,ProfileUpdate.class);
+                Intent u = new Intent(Search.this, Update.class);
                 startActivity(u);
                 break;
         }
@@ -185,5 +163,28 @@ public class Search extends AppCompatActivity
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    public void actionSearch(){
+        DatabaseReference usRef = database.getReference("Donors");
+        String bGroup = blood.getSelectedItem().toString();
+        list.clear();
+        usRef.orderByChild("bloodGroup").equalTo(bGroup).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()){
+
+                    user = ds.getValue(User.class);
+                    list.add(user.getName() + "\t\t\t\t\t" + user.getContact());
+
+                }
+                listView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

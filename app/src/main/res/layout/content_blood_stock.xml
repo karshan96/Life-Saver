@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bld"
+    android:background="@color/background"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".BloodStock"
-    tools:showIn="@layout/app_bar_search">
+    tools:showIn="@layout/app_bar_blood_stock">
 
 
 </android.support.constraint.ConstraintLayout>

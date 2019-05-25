@@ -96,7 +96,7 @@ public class BloodStock extends AppCompatActivity
                 break;
 
             case R.id.nav_update:
-                Intent u = new Intent(BloodStock.this,ProfileUpdate.class);
+                Intent u = new Intent(BloodStock.this, Update.class);
                 startActivity(u);
                 break;
         }
